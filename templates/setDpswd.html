@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <form action="setDpswd/{{did}}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="did" id="" value="{{did}}">
+            <label for="pswd">Enter password: </label>
+            <input type="password" name="pswd">
+            <label for="cpswd">Confirm password: </label>
+            <input type="password" name="cpswd">
+            <input type="submit" name="submit">
+        </form>
+    </body>
+
+</html>

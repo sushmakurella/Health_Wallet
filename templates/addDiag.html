@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add Hospital</title>
+    </head>
+
+    <body>
+        <form action="addDiag" method="post">
+            {% csrf_token %}
+            <label for="hid">Center ID:</label><br>
+            <input type="text" id="did" name="did" required><br>
+
+            <label for="hnumber">Center number:</label><br>
+            <input type="text" id="dnumber" name="dnumber" required><br>
+
+            <label for="hmail">Center Email:</label><br>
+            <input type="email" id="dmail" name="dmail" required><br>
+
+            <label for="hname">Center Name:</label><br>
+            <input type="text" id="dname" name="dname" required><br>
+
+            <label for="pincode">Pincode:</label><br>
+            <input type="text" id="pincode" name="pincode" required><br>
+
+            <label for="state">State:</label><br>
+            <input type="text" id="state" name="state" required><br>
+
+            <label for="dist">District:</label><br>
+            <input type="text" id="dist" name="dist" required><br>
+
+            <label for="Address">Address:</label><br>
+            <input type="text" id="Address" name="Address" required><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+
+</html>
