@@ -13,6 +13,7 @@ class Dummy(models.Model):
 class Patient(models.Model):
     adhno=models.CharField(max_length=12)
     pswd=models.CharField(max_length=500,default="!@#$")
+    otp=models.CharField(max_length=6,default="******")
     pname=models.CharField(max_length=500)
     pincode=models.CharField(max_length=6)
     state=models.CharField(max_length=50)
@@ -29,6 +30,7 @@ class Patient(models.Model):
 class Hospital(models.Model):
     hid=models.CharField(max_length=50)
     hnumber=models.CharField(max_length=20,default="-")
+    otp=models.CharField(max_length=6,default="******")
     pswd=models.CharField(max_length=500,default="!@#$")
     hmail=models.CharField(max_length=500,default="hospital@gmail.com")
     hname=models.CharField(max_length=500)
@@ -40,6 +42,7 @@ class Hospital(models.Model):
 class DiagCenter(models.Model):
     dcid=models.CharField(max_length=50)
     pswd=models.CharField(max_length=500,default="!@#$")
+    otp=models.CharField(max_length=6,default="******")
     dcname=models.CharField(max_length=500)
     pincode=models.CharField(max_length=6)
     state=models.CharField(max_length=50)
