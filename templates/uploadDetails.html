@@ -1,14 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Medical Record Form</title>
 </head>
+
 <body>
-    <form action="" method="POST">
+    <h2>Medical Record Form</h2>
+    <form method="post">
         {% csrf_token %}
-        
+        <label for="date">Date:</label><br>
+        <input type="text" id="date" name="date" maxlength="50" required><br>
+
+        <label for="disease">Disease:</label><br>
+        <input type="text" id="disease" name="disease" maxlength="400" required><br>
+
+        <label for="diagnosis">Diagnosis:</label><br>
+        <input type="text" id="diagnosis" name="diagnosis" maxlength="500" required><br>
+
+        <label for="prescription">Prescription:</label><br>
+        <textarea id="prescription" name="prescription" rows="4" cols="50" maxlength="1000" required></textarea><br>
+
+        <label for="remarks">Remarks:</label><br>
+        <textarea id="remarks" name="remarks" rows="4" cols="50" maxlength="500" required></textarea><br>
+
+        <label for="adhno">Adhno:</label><br>
+        <input type="text" id="adhno" name="adhno" maxlength="12" required><br>
+
+        <label for="hid">Hospital ID:</label><br>
+        <input type="text" id="hid" name="hid" maxlength="50" required><br>
+
+        <label for="hname">Hospital Name:</label><br>
+        <input type="text" id="hname" name="hname" maxlength="50" required><br>
+        <input type="text" name="dm1" id="dm1">
+        <table>
+            <th>
+                <td>SNO:</td>
+                <td>MedicineName:</td>
+                <td >Time</td>
+            </th>
+            <tbody>
+                <tr>
+                    <td>1.</td>
+                    <td><input type="text" name="m1"></td>
+                    <td ><input type="text" name="t1"></td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="submit" value="Submit">
     </form>
 </body>
+
 </html>

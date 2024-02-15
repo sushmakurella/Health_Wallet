@@ -185,5 +185,6 @@ def patientRegister(request):
         s.quit()
         return redirect('home')
     return render(request,"patientRegister.html")
-
+def uploadDetails(request):
+    return render(request,"uploadDetails.html")
     

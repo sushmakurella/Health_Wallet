@@ -63,6 +63,13 @@ class pdfs(models.Model):
     hname=models.CharField(max_length=50)
     pdf=models.FileField(upload_to='pdfs/', blank=True)
     adhno=models.CharField(max_length=12)
+class Pres(models.Model):
+    date=models.CharField(max_length=50)
+    hid=models.CharField(max_length=50)
+    hname=models.CharField(max_length=50)
+    medicine=models.CharField(max_length=500, blank=True)
+    time=models.CharField(max_length=50)
+    adhno=models.CharField(max_length=12)
 class image(models.Model):
     date=models.CharField(max_length=50)
     hid=models.CharField(max_length=50)
