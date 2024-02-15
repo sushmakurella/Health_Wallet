@@ -12,6 +12,8 @@ urlpatterns=[
     
     path('savepswd',views.savepswd,name='savepswd'),
     path('hospitallogin',views.hospitalLogin,name='hospitallogin'),
+    path('patientRegister',views.patientRegister,name='patientRegister'),
+
     path('diaglogin', views.diaglogin, name='diaglogin'),
     
     ]

@@ -24,6 +24,8 @@ def generateOTP() :
  
     return OTP
 # Create your views here.
+hid=""
+pid=""
 def hospitalLogin(request):
     if request.method == 'POST':
         hid = request.POST['hid']
