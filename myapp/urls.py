@@ -8,5 +8,7 @@ urlpatterns=[
     path('setHpswd/setHpswd/<str:hid>',views.setHpswd,name='setHpswd'),
     path('savepswd',views.savepswd,name='savepswd'),
     path('hospitallogin',views.hospitalLogin,name='hospitallogin'),
+    path('patientRegister',views.patientRegister,name='patientRegister'),
+
     
     ]

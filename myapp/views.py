@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 import smtplib
-from .models import Hospital
+from .models import Hospital,Patient
 from django.contrib import messages
 from django.template import loader
 from geopy.geocoders import Nominatim
@@ -24,6 +24,8 @@ def generateOTP() :
  
     return OTP
 # Create your views here.
+hid=""
+pid=""
 def hospitalLogin(request):
     return render(request,'hospitalLogin.html')
 def home(request):
@@ -122,3 +124,66 @@ def map(request):
     folium.Marker([loc2.latitude,loc2.longitude],popup="myloc").add_to(mymap)  
     folium_map_html = mymap._repr_html_()  
     return render(request,"map.html",{"folium_map_html": folium_map_html})
+def patientRegister(request):
+    if request.method == 'POST':
+        adhno = request.POST['adhno']
+        pswd = request.POST['pswd']
+        cpswd=request.POST['cpswd']
+        pname = request.POST['pname']
+        pincode = request.POST['pincode']
+        state = request.POST['state']
+        dist = request.POST['dist']
+        Address = request.POST['Address']
+        gender = request.POST['gender']
+        dob = request.POST['dob']
+        diab = request.POST['diab']
+        bp = request.POST['bp']
+        weight = request.POST['weight']
+        height = request.POST['height']
+        phno = request.POST['phno']
+        email = request.POST['email']
+        if(pswd!=cpswd):
+           render(request,"patientRegister.html",{"msg":"password mismatch"})
+        else:
+            obj = Patient.objects.create(
+            adhno=adhno,
+            pswd=pswd,
+            pname=pname,
+            pincode=pincode,
+            state=state,
+            dist=dist,
+            Address=Address,
+            gender=gender,
+            dob=dob,
+            diab=diab,
+            bp=bp,
+            weight=weight,
+            height=height,
+            phno=phno,
+            emial=email
+        )
+        obj.save();
+        name="sushma"
+       
+        s = smtplib.SMTP('smtp.gmail.com', 587)
+
+# start TLS for security
+        s.starttls()
+        s.login("sushmadilakshmikurella@gmail.com","hsbulcezfkfrhcdz")
+
+# message to be sent
+        m="http://192.168.24.248:8000/setHpswd/"+hid
+        msg="""Congratulations"""
+        msg2="""you have registered succeesfully in Health Wallet website
+            now your data is safe and secure.
+        """
+
+# sending the mail
+        s.sendmail("sushmadilakshmikurella@gmail.com",email, msg+pname+msg2)
+
+# terminating the session
+        s.quit()
+        return redirect('home')
+    return render(request,"patientRegister.html")
+
+    
