@@ -25,7 +25,21 @@ def generateOTP() :
     return OTP
 # Create your views here.
 def hospitalLogin(request):
+    if request.method == 'POST':
+        hid = request.POST['hid']
+        hpswd = request.POST['hpswd']
+        hobj = Hospital.objects.get(hid = hid)
+        if(hobj.pswd == hpswd):
+            return render(request, 'hospitalhome.html',{'hname': hobj.hname})
     return render(request,'hospitalLogin.html')
+def diaglogin(request):
+    if request.method=='POST':
+        did = request.POST['did']
+        dpswd = request.POST['dpswd']
+        dobj = DiagCenter.objects.get(dcid=did)
+        if(dobj.pswd==dpswd):
+            return render(request,'diaghome.html',{'dname':dobj.dcname})
+    return render(request,'diaglogin.html')
 def home(request):
     return render(request,"home.html")
 def savepswd(request):
@@ -80,7 +94,7 @@ def addHospital(request):
        Address=request.POST["Address"]
        speciality=request.POST["speciality"]
        obj=Hospital.objects.create(hid=hid,hmail=mail,hname=hname,pincode=pincode,state=state,dist=dist,Address=Address,speciality=speciality,hnumber=hnumber)
-       obj.save();
+       obj.save()
        name="sushma"
        '''subject="it's me, SUSHMA"
         msg="hello, HOw are you? I hope you all fine."
