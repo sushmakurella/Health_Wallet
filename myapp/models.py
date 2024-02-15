@@ -43,6 +43,7 @@ class DiagCenter(models.Model):
     dcid=models.CharField(max_length=50)
     pswd=models.CharField(max_length=500,default="!@#$")
     otp=models.CharField(max_length=6,default="******")
+    dmail = models.CharField(max_length = 200, default="hospital@gmail.com")
     dcname=models.CharField(max_length=500)
     pincode=models.CharField(max_length=6)
     state=models.CharField(max_length=50)
@@ -57,6 +58,7 @@ class PatientDetails(models.Model):
     adhno=models.CharField(max_length=12)
     hid=models.CharField(max_length=50)
     hname=models.CharField(max_length=50)
+
 class pdfs(models.Model):
     date=models.CharField(max_length=50)
     hid=models.CharField(max_length=50)
