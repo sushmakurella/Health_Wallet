@@ -200,6 +200,8 @@ def map(request):
     folium.Marker([loc2.latitude,loc2.longitude],popup="myloc").add_to(mymap)  
     folium_map_html = mymap._repr_html_()  
     return render(request,"map.html",{"folium_map_html": folium_map_html})
+
+
 def patientRegister(request):
     if request.method == 'POST':
         adhno = request.POST['adhno']
@@ -261,6 +263,3 @@ def patientRegister(request):
         s.quit()
         return redirect('home')
     return render(request,"patientRegister.html")
-def uploadDetails(request):
-    return render(request,"uploadDetails.html")
-    

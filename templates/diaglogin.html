@@ -237,7 +237,7 @@
     <body>
         <div class="container">
             <div class="login-content">
-                <form action="hospitallogin" method="POST">
+                <form action="diaglogin" method="POST">
                     {% csrf_token %}
                     <img src="https://www.citypng.com/public/uploads/preview/-11589162823tvqzrvujcs.png">
                     <h2 class="title">Welcome</h2>
@@ -246,8 +246,8 @@
                             <i class="fas fa-user"></i>
                         </div>
                         <div class="div">
-                            <h5>Hospital ID</h5>
-                            <input type="text" class="input" name="hid">
+                            <h5>Diagnostic center ID</h5>
+                            <input type="text" class="input" name="did">
                         </div>
                     </div>
                     <div class="input-div pass">
@@ -256,7 +256,7 @@
                         </div>
                         <div class="div">
                             <h5>Passowrd</h5>
-                            <input type="password" class="input" name="hpswd">
+                            <input type="password" class="input" name="dpswd">
                         </div>
                     </div>
                     <input type="submit" class="btn" value="Login">

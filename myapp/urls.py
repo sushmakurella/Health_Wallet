@@ -12,10 +12,8 @@ urlpatterns=[
     
     path('savepswd',views.savepswd,name='savepswd'),
     path('hospitallogin',views.hospitalLogin,name='hospitallogin'),
-    path('patientRegister',views.patientRegister,name='patientRegister'),
-    path('uploadDetails',views.uploadDetails,name='uploadDetails'),
-
-
     path('diaglogin', views.diaglogin, name='diaglogin'),
+    path('patientRegister',views.patientRegister,name='patientRegister'),
+
     
     ]
