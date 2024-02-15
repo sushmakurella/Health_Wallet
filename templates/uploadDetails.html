@@ -40,8 +40,9 @@
                 <td>SNO:</td>
                 <td>MedicineName:</td>
                 <td >Time</td>
+                <td>eat</td>
             </th>
-            <tbody>
+            <tbody id="tb1">
                 <tr>
                     <td>1.</td>
                     <td><input type="text" name="m1"></td>
@@ -49,6 +50,32 @@
                 </tr>
             </tbody>
         </table>
+        <button>add</button>
+        <script>
+            function addpres(){
+                var n=parseInt(document.getElementById('dm1'));
+                var tb1= document.getElementById('tb1');
+                var tr=document.createElement("tr");
+                var td1=document.createElement("td");
+                var td2=document.createElement("td");
+                var td3=document.createElement("td");
+                td1.innerHTML=n+1;
+                var inp1=document.createElement("input");
+                var inp2=document.createElement("select");
+                var op1=document.createElement("option");
+                var op2= document.createElement("option");
+                var op3 = document.createElement("option");
+                inp2.multiple=true;
+                op1.text="morning";
+                op2.text="afternoon";
+                op3.text="evning";
+                op4.text="Night";
+                op1.setAttribute("value", "morning");
+                op2.setAttribute("value", "afternoon");
+                op3.setAttribute("value", "evning");
+                op4.setAttribute("value", "Night");
+            }
+        </script>
         <input type="submit" value="Submit">
     </form>
 </body>
