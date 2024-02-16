@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 import math, random
 from twilio.rest import Client
-
+from datetime import date
 
 # function to generate OTP
 def generateOTP() :
@@ -416,7 +416,12 @@ def uploadDetails(request):
     return render(request,"uploadDetails.html")
 def storeDetails(request):
     if request.method=="POST":
-        date = request.POST["date"]
+        current_date = date.today()
+        print(current_date)
+
+        formatted_date = current_date.strftime("%d-%m-%Y")
+        print(formatted_date)
+        date = formatted_date
         disease = request.POST["disease"]
         diagnosis = request.POST["diagnosis"]
         #prescription = request.POST["prescription"]
@@ -575,7 +580,19 @@ def patientLogin(request):
         ppswd = request.POST['ppswd']
         pobj = Patient.objects.get(adhno = pid)
         if(pobj.pswd == ppswd):
-            return render(request, 'patientHome.html',{'pname': pobj.pname})
+            obj=PatientDetails.objects.filter(adhno=pid)
+            lst=[]
+            l=[i for i in range(0,len(obj))]
+            for i in obj:
+                l1=[]
+                l1.append(i)
+                pres=Pres.objects.filter(adhno=pid,date=i.date,hid=i.hid)
+                pd=pdfs.objects.filter(adhno=pid,date=i.date,hid=i.hid)
+                l1.append(pres)
+                l1.append(pd)
+                lst.append(l1)
+                print(pres)
+            return render(request,"displayDetails.html",{"lst":lst,"adno":pid})
     return render(request,'patientLogin.html')
 from django.http import HttpResponseRedirect
 def adminlogout(request):
@@ -583,29 +600,15 @@ def adminlogout(request):
     if request.method=='POST':
         return redirect('home')
     return redirect('adminhome')
-    
 
-def patientLogin(request):
-    if request.method == 'POST':
-        pid = request.POST['pid']
-        ppswd = request.POST['ppswd']
-        pobj = Patient.objects.get(adhno = pid)
-        if(pobj.pswd == ppswd):
-            return render(request, 'patientHome.html',{'pname': pobj.pname})
-    return render(request,'patientLogin.html')
 
 def patientloginregister(request):
     return render(request, "patientlr.html")
 
-<<<<<<< HEAD
-
-=======
 def viewpast(request):
     adno = request.POST['adno']
     obj=PatientDetails.objects.filter(adhno=adno)
     lst=[]
-    lst1=[]
-    lst2=[]
     l=[i for i in range(0,len(obj))]
     for i in obj:
         l1=[]
@@ -630,4 +633,3 @@ def uploadnewD(request):
         dname = request.POST['dname']
         pname = request.POST['pname']
         return render(request, "uploadDetailsDiag.html", {'pname':pname, 'dname':dname, 'did':did})
->>>>>>> midhun
