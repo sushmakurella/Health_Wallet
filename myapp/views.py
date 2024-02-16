@@ -37,10 +37,13 @@ def fetchPatient(request):
         otp = generateOTP()
         pobj.otp = otp
         pobj.save()
-        message = client.messages.create(
-        from_='+12622268250',
-        to='+91'+pmobno,body="Hello dear "+pobj.pname+", Your OTP for HealthWallet is"+otp
-        )
+        try:
+            message = client.messages.create(
+            from_='+12622268250',
+            to='+91'+pmobno,body="Hello dear "+pobj.pname+", Your OTP for HealthWallet is"+otp
+            )
+        except:
+            pass
         return render(request, "otpauth.html",{'adno':adno, 'hname':hname})
 
 def fetchPatientD(request):
@@ -58,10 +61,13 @@ def fetchPatientD(request):
         otp = generateOTP()
         pobj.otp = otp
         pobj.save()
-        message = client.messages.create(
-        from_='+12622268250',
-        to='+91'+pmobno,body="Hello dear "+pobj.pname+", Your OTP for HealthWallet is"+otp
-        )
+        try:
+            message = client.messages.create(
+            from_='+12622268250',
+            to='+91'+pmobno,body="Hello dear "+pobj.pname+", Your OTP for HealthWallet is"+otp
+            )
+        except:
+            pass
         return render(request, "otpauthD.html",{'adno':adno,'dname':dname})
 
 def otpauth(request):
