@@ -9,7 +9,7 @@
 
 <body>
     <h2>Medical Record Form</h2>
-    <form method="post" action="storeDetails">
+    <form method="post" action="storeDetails" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="date">Date:</label><br>
         <input type="date" id="date" name="date" maxlength="50" required><br>

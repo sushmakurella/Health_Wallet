@@ -7,7 +7,7 @@ from geopy.geocoders import Nominatim
 import folium
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-
+from django.contrib.auth import logout
 import math, random
  
 # function to generate OTP
