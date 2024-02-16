@@ -132,7 +132,7 @@ def addHospital(request):
         # terminating the session
        s.quit()
        messages.info(request,"email succesfully sent")
-       return render(request,"home.html")
+       return redirect("adminhome")
     #return render(request,'sendmail.html')
     return render(request,"addHospital.html")
 
@@ -420,3 +420,19 @@ def adminlogin(request):
             return render(request, 'adminlogin.html', {'error_message': error_message})
     else:
         return render(request, 'adminlogin.html')
+
+def patientLogin(request):
+    if request.method == 'POST':
+        pid = request.POST['pid']
+        ppswd = request.POST['ppswd']
+        pobj = Patient.objects.get(adhno = pid)
+        if(pobj.pswd == ppswd):
+            return render(request, 'patientHome.html',{'pname': pobj.pname})
+    return render(request,'patientLogin.html')
+from django.http import HttpResponseRedirect
+def adminlogout(request):
+    # logout(request)
+    if request.method=='POST':
+        return redirect('home')
+    return redirect('adminhome')
+    

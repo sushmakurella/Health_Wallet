@@ -12,7 +12,7 @@ urlpatterns=[
     path('setHpswd/setHpswd/<str:hid>',views.setHpswd,name='setHpswd'),
     path('setDpswd/<str:did>',views.setDpswd,name='setDpswd'),
     path('setDpswd/setDpswd/<str:did>',views.setDpswd,name='setDpswd'),
-    
+    path('patientlogin', views.patientLogin, name = 'patientlogin'),
     path('savepswd',views.savepswd,name='savepswd'),
     path('hospitallogin',views.hospitalLogin,name='hospitallogin'),
     path('diaglogin', views.diaglogin, name='diaglogin'),
@@ -22,6 +22,7 @@ urlpatterns=[
     path('recommendMedicine',views.recommendMedicine,name='recommendMedicine'),    
     path('adminlogin',views.adminlogin,name='adminlogin'),    
     path('adminhome',views.adminhome,name='adminhome'),    
+    path('adminlogout',views.adminlogout,name='adminlogout'),    
     ]
 
 if settings.DEBUG:
