@@ -1,41 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Add Hospital</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Hospital</title>
+    <!DOCTYPE html>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: linear-gradient(to top right, white, rgb(0, 255, 251), blue);
+            /* Background color - yellow */
+            color: #023e73;
+            /* Text color - dark blue */
+        }
 
-    <body>
-        <form action="addDiag" method="post">
-            {% csrf_token %}
-            <label for="hid">Center ID:</label><br>
-            <input type="text" id="did" name="did" required><br>
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f3f3f3;
+            /* Form box background color - light gray */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #023e73;
+            /* Text color inside the form box - dark blue */
+        }
 
-            <label for="hnumber">Center number:</label><br>
-            <input type="text" id="dnumber" name="dnumber" required><br>
+        h2 {
+            color: white;
+            background-color: #023e73;
+            /* Form title color - dark blue */
+            text-align: center;
+            padding: 20px;
+            margin-top: 0%;
+            border-radius: 5px;
+        }
 
-            <label for="hmail">Center Email:</label><br>
-            <input type="email" id="dmail" name="dmail" required><br>
+        label {
+            display: block;
+            margin-top: 10px;
+        }
 
-            <label for="hname">Center Name:</label><br>
-            <input type="text" id="dname" name="dname" required><br>
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            background-color: #d6dfe7;
+            /* Input box color - light gray */
+            border: none;
+            border-radius: 5px;
+            color: #023e73;
+            /* Input text color - dark blue */
+        }
 
-            <label for="pincode">Pincode:</label><br>
-            <input type="text" id="pincode" name="pincode" required><br>
+        input[type="submit"],
+        button {
+            background-color: #023e73;
+            /* Button color - dark blue */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-            <label for="state">State:</label><br>
-            <input type="text" id="state" name="state" required><br>
+        button:hover {
+            background-color: #001f3f;
+            /* Button color on hover - darker blue */
+        }
+    </style>
+    <html lang="en">
 
-            <label for="dist">District:</label><br>
-            <input type="text" id="dist" name="dist" required><br>
 
-            <label for="Address">Address:</label><br>
-            <input type="text" id="Address" name="Address" required><br>
 
-            <input type="submit" value="Submit">
-        </form>
-    </body>
+<body>
+    <form action="addDiag" method="post">
+        {% csrf_token %}
+        <h2>Diagnosis Center Registration</h2>
+        <label for="hid">Center ID:</label><br>
+        <input type="text" id="did" name="did" required><br>
+
+        <label for="hnumber">Center number:</label><br>
+        <input type="text" id="dnumber" name="dnumber" required><br>
+
+        <label for="hmail">Center Email:</label><br>
+        <input type="email" id="dmail" name="dmail" required><br>
+
+        <label for="hname">Center Name:</label><br>
+        <input type="text" id="dname" name="dname" required><br>
+
+        <label for="pincode">Pincode:</label><br>
+        <input type="text" id="pincode" name="pincode" required><br>
+
+        <label for="state">State:</label><br>
+        <input type="text" id="state" name="state" required><br>
+
+        <label for="dist">District:</label><br>
+        <input type="text" id="dist" name="dist" required><br>
+
+        <label for="Address">Address:</label><br>
+        <input type="text" id="Address" name="Address" required><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
 
 </html>

@@ -74,9 +74,12 @@
         <div>
             <h1>Admin Dashboard</h1>
         </div>
-        <button class="logout-btn" onclick="logout()">Logout</button>
+        <button class="logout-btn" onclick="handleLogout()">Logout</a></button>
     </div>
-
+<form action="adminlogout" method="POST" id="myfrm">
+    {% csrf_token %}
+    <input type="submit" name="submit">
+</form>
     <div class="container">
         <a href="{% url 'addHospital' %}">
         <div class="card">
@@ -116,13 +119,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+    
     <script>
-        function logout() {
-            // Implement your logout logic here
-            alert('Logout clicked!');
-        }
+        // Prevent navigating back to the previous page
+            function handleLogout(){
+                window.localStorage.clear();
+                window.location.reload(true);
+                window.location.replace('/');
+            };
     </script>
-
 </body>
 
 </html>
