@@ -53,17 +53,19 @@ class PatientDetails(models.Model):
     date=models.CharField(max_length=50)
     disease=models.CharField(max_length=400)
     diagnosis=models.CharField(max_length=500)
-    prescription=models.CharField(max_length=1000)
+    #prescription=models.CharField(max_length=1000)
     remarks=models.CharField(max_length=500)
     adhno=models.CharField(max_length=12)
     hid=models.CharField(max_length=50)
     hname=models.CharField(max_length=50)
+    dname=models.CharField(max_length=100,default="******")
 
 class pdfs(models.Model):
     date=models.CharField(max_length=50)
     hid=models.CharField(max_length=50)
     hname=models.CharField(max_length=50)
     pdf=models.FileField(upload_to='pdfs/', blank=True)
+    pdfname=models.CharField(max_length=50,default="-")
     adhno=models.CharField(max_length=12)
 class Pres(models.Model):
     date=models.CharField(max_length=50)
@@ -71,6 +73,7 @@ class Pres(models.Model):
     hname=models.CharField(max_length=50)
     medicine=models.CharField(max_length=500, blank=True)
     time=models.CharField(max_length=50)
+    lunch=models.CharField(max_length=50,default="Anytime") 
     adhno=models.CharField(max_length=12)
 class image(models.Model):
     date=models.CharField(max_length=50)

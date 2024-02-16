@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 import smtplib
-from .models import DiagCenter, Hospital
+from .models import DiagCenter, Hospital, PatientDetails,Pres,pdfs,Patient
 from django.contrib import messages
 from django.template import loader
 from geopy.geocoders import Nominatim
@@ -263,3 +263,142 @@ def patientRegister(request):
         s.quit()
         return redirect('home')
     return render(request,"patientRegister.html")
+def uploadDetails(request):
+    return render(request,"uploadDetails.html")
+def storeDetails(request):
+    if request.method=="POST":
+        date = request.POST["date"]
+        disease = request.POST["disease"]
+        diagnosis = request.POST["diagnosis"]
+        #prescription = request.POST["prescription"]
+        remarks = request.POST["remarks"]
+        adhno = request.POST["adhno"]
+        hid = request.POST["hid"]
+        hname = request.POST["hname"]
+        dname = request.POST["dname"]
+        dm1=int(request.POST["dm1"])
+        dm2=int(request.POST["dm2"])
+        obj=PatientDetails.objects.create(
+            date=date,
+            disease=disease,
+            diagnosis=diagnosis,
+            #prescription=prescription,
+            remarks=remarks,
+            adhno=adhno,
+            hid=hid,
+            hname=hname,
+            dname=dname
+        )
+        obj.save();
+        for i in range(1,dm1+1):
+            m=request.POST["m"+str(i)]
+            t=request.POST["t"+str(i)]
+            e=request.POST["e"+str(i)]
+            obj1=Pres.objects.create(
+                date=date,
+                hid=hid,
+                hname=hname,
+                medicine=m,
+                time=t,
+                adhno=adhno,
+                lunch=e
+                )
+            obj1.save();
+        for i in range(1,dm2+1):
+            pdf=request.FILES["pdf"+str(i)]
+            pdfname=request.POST["pdfname"+str(i)]
+            obj2=pdfs.objects.create(
+                date=date,
+                hid=hid,
+                hname=hname,
+                pdf=pdf,
+                pdfname=pdfname,
+                adhno=adhno
+                )
+            obj2.save();
+    return redirect("home")
+import numpy as np 
+import pandas as pd
+import os
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from scipy.sparse import hstack
+from sklearn.feature_extraction.text import TfidfVectorizer
+def recommend_medicines_by_usage(medicine_name, tfidf_matrix_uses, clean_df):
+    # Get the index of the medicine
+    medicine_index = clean_df[clean_df['Medicine Name'] == medicine_name].index[0]
+    
+    # Calculate cosine similarity between the given medicine and others based on usage
+    sim_scores = cosine_similarity(tfidf_matrix_uses, tfidf_matrix_uses[medicine_index])
+    
+    # Get indices of top similar medicines (excluding the queried one)
+    sim_scores = sim_scores.flatten()
+    similar_indices = sim_scores.argsort()[::-1][1:6]  # Top 5 similar medicines
+    
+    # Get recommended medicine names
+    recommended_medicines = clean_df.iloc[similar_indices]['Medicine Name'].tolist()
+    
+    return recommended_medicines
+def recommend_medicines_by_symptoms(symptoms, tfidf_vectorizer, tfidf_matrix_uses, clean_df):
+    # Create a string from the given symptoms
+    symptom_str = ' '.join(symptoms)
+    
+    # Transform the symptom string using the TF-IDF vectorizer
+    symptom_vector = tfidf_vectorizer.transform([symptom_str])
+    
+    # Calculate cosine similarity between the symptom vector and all medicine vectors
+    sim_scores = cosine_similarity(tfidf_matrix_uses, symptom_vector)
+    
+    # Get indices of top similar medicines
+    sim_scores = sim_scores.flatten()
+    similar_indices = sim_scores.argsort()[::-1][:5]  # Top 5 similar medicines
+    
+    # Get recommended medicine names
+    recommended_medicines = clean_df.iloc[similar_indices]['Medicine Name'].tolist()
+    
+    return recommended_medicines
+def recommendMedicine(request):
+    if request.method=='POST':
+        # for dirname, _, filenames in os.walk(r"/Users/jvmohanakrishnainty/Desktop/Med_Recommend/Medical2/Medicine_Details.csv"):
+        #     for filename in filenames:
+        #         print(os.path.join(dirname, filename))
+        df = pd.read_csv(r'C:/Users/Dell/OneDrive/Desktop/djpro/medicalProject/Medicine_Details.csv')
+        #df.head()
+        clean_df = df.drop_duplicates()
+        tfidf_vectorizer = TfidfVectorizer(stop_words='english')
+        tfidf_matrix_uses = tfidf_vectorizer.fit_transform(clean_df['Uses'].astype(str))
+        tfidf_matrix_composition = tfidf_vectorizer.fit_transform(clean_df['Composition'].astype(str))
+        tfidf_matrix_side_effects = tfidf_vectorizer.fit_transform(clean_df['Side_effects'].astype(str))
+        min_rows = min(tfidf_matrix_uses.shape[0], tfidf_matrix_composition.shape[0], tfidf_matrix_side_effects.shape[0])
+
+    # Trim matrices to have the same number of rows
+        tfidf_matrix_uses = tfidf_matrix_uses[:min_rows]
+        tfidf_matrix_composition = tfidf_matrix_composition[:min_rows]
+        tfidf_matrix_side_effects = tfidf_matrix_side_effects[:min_rows]
+
+        tfidf_matrix_combined = hstack((tfidf_matrix_uses, tfidf_matrix_composition, tfidf_matrix_side_effects))
+
+        cosine_sim_combined = cosine_similarity(tfidf_matrix_combined, tfidf_matrix_combined)
+
+        # query = "Lobet 20mg Injection"
+        # recommended_medicines = recommend_medicines_by_usage(query, tfidf_matrix_uses, clean_df)
+        # print(recommended_medicines)
+
+    
+
+        # Create a TF-IDF vectorizer for symptoms
+        tfidf = TfidfVectorizer(stop_words='english')
+
+        # Fit and transform the 'Uses' column to create the TF-IDF matrix for symptoms
+        tfidf_matrix_uses = tfidf.fit_transform(clean_df['Uses'])
+
+    # Now, you can call the recommend_medicines_by_symptoms function
+        query = request.POST["ds"] # Convert the single symptom to a list
+        print(query)
+        recommended_medicines = recommend_medicines_by_symptoms(query, tfidf, tfidf_matrix_uses, clean_df)
+        print(recommended_medicines)
+        #****************************************model one completed**********************************
+        return render(request,"displayMedicine.html",{"data":recommended_medicines})
+    return render(request,"recommendMedicine.html")
+    
