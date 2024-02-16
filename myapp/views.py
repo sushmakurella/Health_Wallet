@@ -9,21 +9,100 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 import math, random
- 
+from twilio.rest import Client
+
+
 # function to generate OTP
 def generateOTP() :
- 
-    # Declare a digits variable  
-    # which stores all digits 
     digits = "0123456789"
     OTP = ""
- 
-   # length of password can be changed
-   # by changing value in range
     for i in range(4) :
         OTP += digits[math.floor(random.random() * 10)]
- 
     return OTP
+
+
+
+account_sid = 'AC104950427701f529ac826544713d6843'
+auth_token = '35651393a6b7a4007a87b3a8db808cec'
+def fetchPatient(request):
+    if request.method == 'POST':
+        adno = request.POST['aadhaar']
+        hname = request.POST['hname']
+        try:
+            pobj = Patient.objects.get(adhno = adno)
+            print(pobj)
+        except:
+            return redirect(hospitalLogin)
+        pmobno = str(pobj.phno)
+        client = Client(account_sid, auth_token)
+        otp = generateOTP()
+        pobj.otp = otp
+        pobj.save()
+        message = client.messages.create(
+        from_='+12622268250',
+        to='+91'+pmobno,body="Hello dear "+pobj.pname+", Your OTP for HealthWallet is"+otp
+        )
+        return render(request, "otpauth.html",{'adno':adno, 'hname':hname})
+
+def fetchPatientD(request):
+    if request.method == 'POST':
+        adno = request.POST['aadhaar']
+        dname = request.POST['dname']
+        print(dname,'1111')
+        try:
+            pobj = Patient.objects.get(adhno = adno)
+            print(pobj)
+        except:
+            return redirect(diaglogin)
+        pmobno = str(pobj.phno)
+        client = Client(account_sid, auth_token)
+        otp = generateOTP()
+        pobj.otp = otp
+        pobj.save()
+        message = client.messages.create(
+        from_='+12622268250',
+        to='+91'+pmobno,body="Hello dear "+pobj.pname+", Your OTP for HealthWallet is"+otp
+        )
+        return render(request, "otpauthD.html",{'adno':adno,'dname':dname})
+
+def otpauth(request):
+    if request.method == 'POST':
+        adno = request.POST['adno']
+        otp = request.POST['otp']
+        hname = request.POST['hname']
+
+        try:
+            pobj = Patient.objects.get(adhno = adno)
+            print(pobj)
+        except:
+            return redirect(hospitalLogin)
+        correct_otp = str(pobj.otp) 
+        print(correct_otp, otp)
+        if(otp == correct_otp):
+            return render(request, "uploadDetailsHosp.html", {'pname':pobj.pname, 'hname':hname})
+        else:
+            return redirect(hospitalLogin)
+
+
+def otpauthD(request):
+    if request.method == 'POST':
+        adno = request.POST['adno']
+        otp = request.POST['otp']
+        dname = request.POST['dname']
+        print(dname,'3333')
+        try:
+            pobj = Patient.objects.get(adhno = adno)
+            print(pobj)
+        except:
+            return redirect(diaglogin)
+        correct_otp = str(pobj.otp) 
+        print(correct_otp, otp)
+        if(otp == correct_otp):
+            return render(request, "uploadDetailsDiag.html", {'pname':pobj.pname, 'dname':dname})
+        else:
+            return redirect(diaglogin)
+
+
 # Create your views here.
 hid=""
 pid=""

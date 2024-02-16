@@ -24,6 +24,11 @@ urlpatterns=[
     path('adminlogin',views.adminlogin,name='adminlogin'),    
     path('adminhome',views.adminhome,name='adminhome'),    
     path('adminlogout',views.adminlogout,name='adminlogout'),    
+    path('adminhome',views.adminhome,name='adminhome'),
+    path('fetchPatient', views.fetchPatient, name = 'fetchPatient'),
+    path('fetchPatientD', views.fetchPatientD, name = 'fetchPatientD'),
+    path('otpauth', views.otpauth, name = 'otpauth'),
+    path('otpauthD', views.otpauthD, name = 'otpauthD'),
     ]
 
 if settings.DEBUG:
