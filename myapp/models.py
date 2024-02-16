@@ -41,6 +41,7 @@ class Hospital(models.Model):
     speciality=models.CharField(max_length=100)
 class DiagCenter(models.Model):
     dcid=models.CharField(max_length=50)
+    dnumber=models.CharField(max_length=15,default="0000000000")
     pswd=models.CharField(max_length=500,default="!@#$")
     otp=models.CharField(max_length=6,default="******")
     dmail = models.CharField(max_length = 200, default="hospital@gmail.com")
