@@ -448,3 +448,5 @@ def patientLogin(request):
 
 def patientloginregister(request):
     return render(request, "patientlr.html")
+
+
