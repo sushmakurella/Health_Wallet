@@ -22,7 +22,11 @@ urlpatterns=[
     path('storeDetails',views.storeDetails,name='storeDetails'),    
     path('recommendMedicine',views.recommendMedicine,name='recommendMedicine'),    
     path('adminlogin',views.adminlogin,name='adminlogin'),    
-    path('adminhome',views.adminhome,name='adminhome'),    
+    path('adminhome',views.adminhome,name='adminhome'),
+    path('fetchPatient', views.fetchPatient, name = 'fetchPatient'),
+    path('fetchPatientD', views.fetchPatientD, name = 'fetchPatientD'),
+    path('otpauth', views.otpauth, name = 'otpauth'),
+    path('otpauthD', views.otpauthD, name = 'otpauthD'),
     ]
 
 if settings.DEBUG:

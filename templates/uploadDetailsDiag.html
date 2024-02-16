@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Medical Record Form</title>
+    </head>
+
+    <body>
+        <h2>Medical Record Form</h2>
+        <h3>Diagnostic center name: {{dname}}</h3>
+        <h3>Patient name: {{pname}}</h3>
+        <form method="post" action="storeDetails">
+            {% csrf_token %}
+            <label for="date">Date:</label><br>
+            <input type="date" id="date" name="date" maxlength="50" required><br>
+
+            <label for="disease">Disease:</label><br>
+            <input type="text" id="disease" name="disease" maxlength="400" required><br>
+
+            <label for="diagnosis">Diagnosis:</label><br>
+            <input type="text" id="diagnosis" name="diagnosis" maxlength="500" required><br>
+
+            <!-- <label for="prescription">Prescription:</label><br>
+        <textarea id="prescription" name="prescription" rows="4" cols="50" maxlength="1000" required></textarea><br> -->
+
+            <label for="remarks">Remarks:</label><br>
+            <textarea id="remarks" name="remarks" rows="4" cols="50" maxlength="500" required></textarea><br>
+
+            <label for="adhno">Adhno:</label><br>
+            <input type="text" id="adhno" name="adhno" maxlength="12" required><br>
+
+            <label for="hid">Hospital ID:</label><br>
+            <input type="text" id="hid" name="hid" maxlength="50" required><br>
+
+            <label for="hname">Hospital Name:</label><br>
+            <input type="text" id="hname" name="hname" maxlength="50" required><br>
+
+            <label for="hname">Doctor Name:</label><br>
+            <input type="text" id="hname" name="dname" maxlength="50" required><br>
+
+            <input type="text" name="dm1" id="dm1" value="1">
+            <!-- <table>
+                <th>
+                <td>SNO:</td>
+                <td>MedicineName:</td>
+                <td>Time</td>
+                <td>eat</td>
+                </th>
+                <tbody id="tb1">
+                    <tr>
+                        <td>1.</td>
+                        <td><input type="text" name="m1"></td>
+                        <td><input type="text" name="t1"></td>
+                        <td><input type="text" name="e1"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div onclick="addpres()">add</div> -->
+            <input type="text" name="dm2" id="dm2" value="1">
+            <table>
+                <th>
+                <td>SNO:</td>
+                <td>pdfName</td>
+                <td>File</td>
+
+                </th>
+                <tbody id="tb2">
+                    <tr>
+                        <td>1.</td>
+                        <td><input type="text" name="pdfname1"></td>
+                        <td><input type="file" name="pdf1"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div onclick="addpdf()">add</div>
+            <script>
+                // function addpres() {
+                //     var dm1 = document.getElementById('dm1');
+                //     var n = parseInt(dm1.value);
+                //     var tb1 = document.getElementById('tb1');
+                //     var tr = document.createElement("tr");
+                //     var td1 = document.createElement("td");
+                //     var td2 = document.createElement("td");
+                //     var td3 = document.createElement("td");
+                //     var td4 = document.createElement("td");
+                //     td1.innerHTML = n + 1;
+                //     var inp1 = document.createElement("input");
+                //     var inp2 = document.createElement("input");
+                //     var inp3 = document.createElement("input");
+                //     n++;
+                //     dm1.setAttribute("value", n);
+                //     inp1.setAttribute("name", "m" + n);
+                //     inp2.setAttribute("name", "t" + n);
+                //     inp3.setAttribute("name", "e" + n);
+                //     tb1.append(tr);
+                //     tr.append(td1);
+                //     tr.append(td2);
+                //     tr.append(td3);
+                //     tr.append(td4);
+                //     td2.append(inp1);
+                //     td3.append(inp2);
+                //     td4.append(inp3);
+                // }
+
+                function addpdf() {
+                    var dm2 = document.getElementById('dm2');
+                    var n = parseInt(dm2.value);
+                    var tb1 = document.getElementById('tb2');
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    var td3 = document.createElement("td");
+                    td1.innerHTML = n + 1;
+                    var inp1 = document.createElement("input");
+                    var inp2 = document.createElement("input");
+                    inp2.setAttribute('type', "file");
+                    n++;
+                    dm2.setAttribute("value", n);
+                    inp1.setAttribute("name", "pdfname" + n);
+                    inp2.setAttribute("name", "pdf" + n);
+                    tb1.append(tr);
+                    tr.append(td1);
+                    tr.append(td2);
+                    tr.append(td3);
+                    td2.append(inp1);
+
+                    td3.append(inp2);
+                }
+            </script>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+
+</html>

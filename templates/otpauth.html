@@ -8,15 +8,14 @@
     </head>
 
     <body>
-        <h1>Welcome to {{hname}}</h1>
-        <form method="POST" action="fetchPatient">
+        <form method="POST" action="otpauth">
             {% csrf_token %}
             <input style="display: none;" type="text" name="hname" id="hname" value="{{hname}}">
-            <label for="aadhaar">Enter aadhaar number here: </label>
-            <input type="text" name="aadhaar" id="aadhaar">
+            <input style="display: none;" type="text" name="adno" id="adno" value="{{adno}}">
+            <label for="otp">Enter your OTP here: </label>
+            <input type="text" name="otp" id="otp">
             <button type="submit">submit</button>
         </form>
-        <h1><a href="{%url 'patientRegister' %}">Register new user</a></h1>
     </body>
 
 </html>
