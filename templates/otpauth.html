@@ -10,6 +10,7 @@
     <body>
         <form method="POST" action="otpauth">
             {% csrf_token %}
+            <input style="display: none;" type="text" name="hid" id="hid" value="{{hid}}">
             <input style="display: none;" type="text" name="hname" id="hname" value="{{hname}}">
             <input style="display: none;" type="text" name="adno" id="adno" value="{{adno}}">
             <label for="otp">Enter your OTP here: </label>

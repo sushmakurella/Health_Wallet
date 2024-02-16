@@ -10,6 +10,7 @@
     <body>
         <form method="POST" action="otpauthD">
             {% csrf_token %}
+            <input style="display: none;" type="text" name="did" id="did" value="{{did}}">
             <input style="display: none;" type="text" name="dname" id="dname" value="{{dname}}">
             <input style="display: none;" type="text" name="adno" id="adno" value="{{adno}}">
             <label for="otp">Enter your OTP here: </label>
