@@ -72,18 +72,29 @@
             background-color: #001f3f;
             /* Button color on hover - darker blue */
         }
+        .dd{
+            align-items: center;
+        }
     </style>
 </head>
 
 <body>
+
     <form action="addHospital" method="post">
         {% csrf_token %}
         <h2>Hospital Registration</h2>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li style="color: red;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <label for="hid">Hospital ID:</label><br>
         <input type="text" id="hid" name="hid" required><br>
 
         <label for="hnumber">hospital number:</label><br>
-        <input type="password" id="hnumber" name="hnumber" required><br>
+        <input type="text" id="hnumber" name="hnumber" required><br>
 
         <label for="hmail">Email:</label><br>
         <input type="email" id="hmail" name="hmail" required><br>

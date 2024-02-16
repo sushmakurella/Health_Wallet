@@ -6,12 +6,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Form</title>
 </head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: linear-gradient(to top right,white,rgb(0, 255, 251),blue); /* Background color - yellow */
+        color: #023e73; /* Text color - dark blue */
+    }
 
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #f3f3f3; /* Form box background color - light gray */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        color: #023e73; /* Text color inside the form box - dark blue */
+    }
+
+    h2 {
+        color: white;
+        background-color: #023e73; /* Form title color - dark blue */
+        text-align: center;
+        padding: 20px;
+        margin-top: 0%;
+        border-radius: 5px;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        box-sizing: border-box;
+        background-color: #d6dfe7; /* Input box color - light gray */
+        border: none;
+        border-radius: 5px;
+        color: #023e73; /* Input text color - dark blue */
+    }
+
+    input[type="submit"], button {
+        background-color: #023e73; /* Button color - dark blue */
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #001f3f; /* Button color on hover - darker blue */
+    }
+    
+</style>
 <body>
-    <h5>{{msg}}</h5>
-    <h2>User Registration: </h2>
     <form action="patientRegister" method="post">
         {% csrf_token %}
+        <h2>User Registration: </h2>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li style="color: red;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <label for="adhno">Adhno:</label><br>
         <input type="text" id="adhno" name="adhno" maxlength="12"><br>
 
