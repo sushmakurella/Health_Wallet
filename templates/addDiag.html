@@ -82,6 +82,13 @@
     <form action="addDiag" method="post">
         {% csrf_token %}
         <h2>Diagnosis Center Registration</h2>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li style="color: red;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <label for="hid">Center ID:</label><br>
         <input type="text" id="did" name="did" required><br>
 

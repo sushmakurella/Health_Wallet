@@ -175,6 +175,16 @@ def addHospital(request):
        dist=request.POST["dist"]
        Address=request.POST["Address"]
        speciality=request.POST["speciality"]
+       if(Hospital.objects.filter(hid=hid).exists()):
+           messages.error(request,"hospital id already exists")
+           return redirect(addHospital)
+       if(Hospital.objects.filter(hnumber=hnumber).exists()):
+           messages.error(request,"phone number already exists")
+           return redirect(addHospital)
+       if(Hospital.objects.filter(hmail=mail).exists()):
+           messages.error(request,"email already exists")
+           return redirect(addHospital)
+
        obj=Hospital.objects.create(hid=hid,hmail=mail,hname=hname,pincode=pincode,state=state,dist=dist,Address=Address,speciality=speciality,hnumber=hnumber)
        obj.save()
        name="sushma"
@@ -225,7 +235,16 @@ def addDiag(request):
        state=request.POST["state"]
        dist=request.POST["dist"]
        Address=request.POST["Address"]
-       obj=DiagCenter.objects.create(dcid=did,dcname = dname, pincode = pincode, state = state, dist = dist, Address = Address, dmail = mail)
+       if(DiagCenter.objects.filter(dcid=did).exists()):
+           messages.error(request,"center id already exists")
+           return redirect(addDiag)
+       if(DiagCenter.objects.filter(dnumber=dnumber).exists()):
+           messages.error(request,"phone number already exists")
+           return redirect(addDiag)
+       if(DiagCenter.objects.filter(dmail=mail).exists()):
+           messages.error(request,"email already exists")
+           return redirect(addDiag)
+       obj=DiagCenter.objects.create(dcid=did,dnumber=dnumber,dcname = dname, pincode = pincode, state = state, dist = dist, Address = Address, dmail = mail)
        obj.save()
        name="sushma"
        '''subject="it's me, SUSHMA"
@@ -303,6 +322,15 @@ def patientRegister(request):
         if(pswd!=cpswd):
            render(request,"patientRegister.html",{"msg":"password mismatch"})
         else:
+            if(Patient.objects.filter(adhno=adhno).exists()):
+                messages.error(request,"Aadhar already exists")
+                return redirect(patientRegister)
+            if(Patient.objects.filter(phno=phno).exists()):
+                messages.error(request,"phone number already exists")
+                return redirect(patientRegister)
+            if(Patient.objects.filter(email=email).exists()):
+                messages.error(request,"email already exists")
+                return redirect(patientRegister)
             obj = Patient.objects.create(
             adhno=adhno,
             pswd=pswd,
