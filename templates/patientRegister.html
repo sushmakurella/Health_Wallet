@@ -6,11 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Form</title>
 </head>
+<script>
+    function isValidMobileNumber(mobileNumber) {
+        // Remove any non-numeric characters
+        var cleanedNumber = mobileNumber.replace(/\D/g, '');
+
+        // Check if the cleaned number is a valid format
+        // In this example, we are checking for a 10-digit number
+        if (/^\d{10}$/.test(cleanedNumber)) {
+            // Additional checks can be added based on specific requirements
+            return true;
+        }
+
+        return false;
+    }
+
+    // Example usage
+
+    function isValidEmail(email) {
+        // Regular expression for basic email validation
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    function validate() {
+        var hmail = document.getElementById("email").value;
+        var frm = document.getElementById("frm");
+        var hn = document.getElementById("phno").value;
+        if (hn.length == 10) {
+            if (isValidEmail(hmail)) { frm.submit(); }
+            else {
+                alert("invalid email id");
+            }
+
+        }
+        else {
+            alert("invalid phone number");
+        }
+
+
+    }
+
+    // Example usage
+
+</script>
 <style>
     body {
         font-family: Arial, sans-serif;
         margin: 20px;
-        background: linear-gradient(to top right,white,rgb(0, 255, 251),blue); /* Background color - yellow */
+        background-color: #35b0e9;; /* Background color - yellow */
         color: #023e73; /* Text color - dark blue */
     }
 
@@ -65,7 +108,7 @@
     
 </style>
 <body>
-    <form action="patientRegister" method="post">
+    <form action="patientRegister" method="post" id="frm">
         {% csrf_token %}
         <h2>User Registration: </h2>
         {% if messages %}
@@ -75,14 +118,14 @@
                 {% endfor %}
             </ul>
         {% endif %}
-        <label for="adhno">Adhno:</label><br>
-        <input type="text" id="adhno" name="adhno" maxlength="12"><br>
+        <label for="adhno" id="frm">Adhno:</label><br>
+        <input type="number" id="adhno" name="adhno" maxlength="12"><br>
 
         <label for="pname">Name:</label><br>
         <input type="text" id="pname" name="pname" maxlength="500"><br>
 
         <label for="pincode">Pincode:</label><br>
-        <input type="text" id="pincode" name="pincode" maxlength="6"><br>
+        <input type="number" id="pincode" name="pincode" maxlength="6"><br>
 
         <label for="state">State:</label><br>
         <input type="text" id="state" name="state" maxlength="50"><br>
@@ -123,7 +166,7 @@
         <label for="pswd">ConfirmPassword:</label><br>
         <input type="password" id="cpswd" name="cpswd" maxlength="500"><br>
 
-        <input type="submit" value="Submit">
+        <div onclick="validate()">Submit</div>
     </form>
 </body>
 

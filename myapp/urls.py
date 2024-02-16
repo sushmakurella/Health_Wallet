@@ -33,6 +33,13 @@ urlpatterns=[
     path('viewpast', views.viewpast, name='viewpast'),
     path('uploadnew', views.uploadnew, name='uploadnew'),
     path('uploadnewD', views.uploadnewD, name='uploadnewD'),
+    path('viewStats', views.showStats, name='viewStats'),
+    path('displaypdf', views.displaypdf, name='displaypdf'),
+    path('addpdf', views.addpdf, name='addpdf'),
+    path('storepdf', views.storepdf, name='storepdf'),
+    path('patientHome', views.storepdf, name='storepdf'),
+    path('map', views.map, name='map'),
+    path('nearby', views.map, name='nearby'),
     ]
 
 if settings.DEBUG:

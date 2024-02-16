@@ -5,7 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Hospital</title>
-    <!DOCTYPE html>
+<script>
+    function isValidMobileNumber(mobileNumber) {
+        // Remove any non-numeric characters
+        var cleanedNumber = mobileNumber.replace(/\D/g, '');
+
+        // Check if the cleaned number is a valid format
+        // In this example, we are checking for a 10-digit number
+        if (/^\d{10}$/.test(cleanedNumber)) {
+            // Additional checks can be added based on specific requirements
+            return true;
+        }
+
+        return false;
+    }
+
+    // Example usage
+
+    function isValidEmail(email) {
+        // Regular expression for basic email validation
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    function validate() {
+        var hmail = document.getElementById("dmail").value;
+        var frm = document.getElementById("frm");
+        var hn = document.getElementById("dnumber").value;
+        if (hn.length == 10) {
+            if (isValidEmail(hmail)) { frm.submit(); }
+            else {
+                alert("invalid email id");
+            }
+
+        }
+        else {
+            alert("invalid phone number");
+        }
+
+
+    }
+
+    // Example usage
+
+</script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -73,33 +115,36 @@
             background-color: #001f3f;
             /* Button color on hover - darker blue */
         }
+
+        .dd {
+            align-items: center;
+        }
     </style>
-    <html lang="en">
-
-
+</head>
 
 <body>
-    <form action="addDiag" method="post">
+
+    <form action="addDiag" method="post" id="frm">
         {% csrf_token %}
-        <h2>Diagnosis Center Registration</h2>
+        <h2>Hospital Registration</h2>
         {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li style="color: red;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
+        <ul class="messages">
+            {% for message in messages %}
+            <li style="color: red;" {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
         {% endif %}
-        <label for="hid">Center ID:</label><br>
-        <input type="text" id="did" name="did" required><br>
+        <label for="hid">Hospital ID:</label><br>
+        <input type="text" id="hid" name="did" required><br>
 
-        <label for="hnumber">Center number:</label><br>
-        <input type="text" id="dnumber" name="dnumber" required><br>
+        <label for="hnumber">hospital number:</label><br>
+        <input type="number" id="hnumber" name="dnumber" required><br>
 
-        <label for="hmail">Center Email:</label><br>
-        <input type="email" id="dmail" name="dmail" required><br>
+        <label for="hmail">Email:</label><br>
+        <input type="email" id="hmail" name="dmail" required><br>
 
-        <label for="hname">Center Name:</label><br>
-        <input type="text" id="dname" name="dname" required><br>
+        <label for="hname">Hospital Name:</label><br>
+        <input type="text" id="hname" name="dname" required><br>
 
         <label for="pincode">Pincode:</label><br>
         <input type="text" id="pincode" name="pincode" required><br>
@@ -113,7 +158,11 @@
         <label for="Address">Address:</label><br>
         <input type="text" id="Address" name="Address" required><br>
 
-        <input type="submit" value="Submit">
+        <label for="speciality">Speciality:</label><br>
+        <input type="text" id="speciality" name="speciality" required><br><br>
+        <div onclick="validate()"> Submit</div>
+
+        <!-- <input type="submit" value="Submit"> -->
     </form>
 </body>
 

@@ -28,18 +28,18 @@
                 return emailRegex.test(email);
             }
             function validate() {
-                var hmail = document.getElementById("hmail");
+                var hmail = document.getElementById("hmail").value;
                 var frm = document.getElementById("frm");
-                if (isValidEmail(hmail)) {
-                    if (isValidMobileNumber(number)) {
-                        frm.submit();
+                var hn=document.getElementById("hnumber").value;
+                if(hn.length==10){
+                    if(isValidEmail(hmail)){ frm.submit(); }
+                    else{
+                        alert("invalid email id");
                     }
-                    else {
-                        alert("invalid phone number");
-                    }
+                    
                 }
-                else {
-                    alert("invalid email");
+                else{
+                    alert("invalid phone number");
                 }
 
 
@@ -52,7 +52,7 @@
             body {
                 font-family: Arial, sans-serif;
                 margin: 20px;
-                background: linear-gradient(to top right, white, rgb(0, 255, 251), blue);
+                background-color: #35b0e9;
                 /* Background color - yellow */
                 color: #023e73;
                 /* Text color - dark blue */

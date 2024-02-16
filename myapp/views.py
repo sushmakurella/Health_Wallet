@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 import smtplib
-from .models import DiagCenter, Hospital, PatientDetails,Pres,pdfs,Patient
+from .models import DiagCenter, Hospital, PatientDetails,Pres,pdfs,Patient,ppdfs
 from django.contrib import messages
 from django.template import loader
 from geopy.geocoders import Nominatim
@@ -11,7 +11,13 @@ from django.contrib.auth import logout
 import math, random
 from twilio.rest import Client
 from datetime import date
-
+import math, random
+import pandas as pd
+from collections import Counter
+import json
+import requests
+from requests.structures import CaseInsensitiveDict
+import urllib.parse
 # function to generate OTP
 def generateOTP() :
     digits = "0123456789"
@@ -204,18 +210,23 @@ def setDpswd(request,did):
             return redirect('home')
     did1=did
     return render(request,'setDpswd.html',{"did":did1})
-
+import re
 def addHospital(request):
     if request.method=="POST":
        hid=request.POST["hid"]
        hnumber=request.POST['hnumber']
        mail=request.POST["hmail"]
+       pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@gmail\.com$')
        hname=request.POST["hname"]
        pincode=request.POST["pincode"]
        state=request.POST["state"]
        dist=request.POST["dist"]
        Address=request.POST["Address"]
        speciality=request.POST["speciality"]
+       #return pattern.match(email) is not None
+    #    if(pattern.match(mail) is None):
+    #        messages.error(request,"not a valid mail")
+    #        return redirect(addHospital)
        if(Hospital.objects.filter(hid=hid).exists()):
            messages.error(request,"hospital id already exists")
            return redirect(addHospital)
@@ -276,6 +287,10 @@ def addDiag(request):
        state=request.POST["state"]
        dist=request.POST["dist"]
        Address=request.POST["Address"]
+       pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@gmail\.com$')
+    #    if(pattern.match(mail) is None):
+    #        messages.error(request,"not a valid mail")
+    #        return redirect(addDiag)
        if(DiagCenter.objects.filter(dcid=did).exists()):
            messages.error(request,"center id already exists")
            return redirect(addDiag)
@@ -326,20 +341,41 @@ def addDiag(request):
     return render(request, "addDiag.html")
 
        
+def coord(address):
+    url = "https://api.geoapify.com/v1/geocode/search?text="+str(address)+"&apiKey=a1b07ce765f14402b307e1edb02f6920"
+    headers = CaseInsensitiveDict()
+    headers["Accept"] = "application/json"
+    resp = requests.get(url, headers=headers)
+    if resp.status_code == 200:
+        data = resp.json()
+        if 'features' in data and data['features']:
+            result = data['features'][0]
+            latitude = result['properties']['lat']
+            longitude = result['properties']['lon']
+            return latitude,longitude
+    return None
 def map(request):
-    geolocator = Nominatim(user_agent="my_user_agent")
-
-    # Enter the pin code
-    pincode = "534202"  # Example pin code for Buckingham Palace
-    p2="534101"
-    # Perform geocoding with pin code
-    loc = geolocator.geocode(pincode)
-    loc2= geolocator.geocode(p2)
-    mymap=folium.Map(location=[loc.latitude,loc.longitude],zoom_start=9)
-    folium.Marker([loc.latitude,loc.longitude],popup="myloc").add_to(mymap)
-    folium.Marker([loc2.latitude,loc2.longitude],popup="myloc").add_to(mymap)  
-    folium_map_html = mymap._repr_html_()  
-    return render(request,"map.html",{"folium_map_html": folium_map_html})
+    if request.method == 'POST':
+        geolocator = Nominatim(user_agent="my_user_agent")
+        # Enter the pin code
+        pincode = request.POST['pin']  # Example pin code for Buckingham Palace
+        alob = Hospital.objects.filter(pincode=pincode).values()
+        district = alob[0]['dist']
+        print(district)
+        disobj = Hospital.objects.filter(dist=district).values()
+        # loc = geolocator.geocode(pincode)
+        mymap=folium.Map(location=[0,0],zoom_start=9)
+        for i in disobj:
+            try:
+                latt,logg = coord(urllib.parse.quote(i['Address']))
+                if(latt is None or logg is None):
+                    continue
+            except:
+                continue
+            folium.Marker([latt,logg],popup="myloc",tooltip=i['hname']).add_to(mymap)
+        folium_map_html = mymap._repr_html_()  
+        return render(request,"map.html",{"folium_map_html": folium_map_html})
+    return render(request, "enterpin.html")
 
 
 def patientRegister(request):
@@ -360,6 +396,10 @@ def patientRegister(request):
         height = request.POST['height']
         phno = request.POST['phno']
         email = request.POST['email']
+        pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@gmail\.com$')
+        # if(pattern.match(email) is None):
+        #    messages.error(request,"not a valid mail")
+        #    return redirect(patientRegister)
         if(pswd!=cpswd):
            render(request,"patientRegister.html",{"msg":"password mismatch"})
         else:
@@ -369,7 +409,7 @@ def patientRegister(request):
             if(Patient.objects.filter(phno=phno).exists()):
                 messages.error(request,"phone number already exists")
                 return redirect(patientRegister)
-            if(Patient.objects.filter(email=email).exists()):
+            if(Patient.objects.filter(emial=email).exists()):
                 messages.error(request,"email already exists")
                 return redirect(patientRegister)
             obj = Patient.objects.create(
@@ -414,14 +454,15 @@ def patientRegister(request):
     return render(request,"patientRegister.html")
 def uploadDetails(request):
     return render(request,"uploadDetails.html")
+from datetime import date
 def storeDetails(request):
     if request.method=="POST":
         current_date = date.today()
         print(current_date)
 
         formatted_date = current_date.strftime("%d-%m-%Y")
-        print(formatted_date)
-        date = formatted_date
+        print(formatted_date,'hereeeeeeee')
+        date1 = formatted_date
         disease = request.POST["disease"]
         diagnosis = request.POST["diagnosis"]
         #prescription = request.POST["prescription"]
@@ -429,11 +470,11 @@ def storeDetails(request):
         adhno = request.POST["adhno"]
         hid = request.POST["hid"]
         hname = request.POST["hname"]
-        dname = request.POST["dname"]
+        dname = request.POST["doname"]
         dm1=int(request.POST["dm1"])
         dm2=int(request.POST["dm2"])
         obj=PatientDetails.objects.create(
-            date=date,
+            date=date1,
             disease=disease,
             diagnosis=diagnosis,
             #prescription=prescription,
@@ -449,25 +490,27 @@ def storeDetails(request):
             t=request.POST["t"+str(i)]
             e=request.POST["e"+str(i)]
             obj1=Pres.objects.create(
-                date=date,
+                date=formatted_date,
                 hid=hid,
                 hname=hname,
                 medicine=m,
                 time=t,
                 adhno=adhno,
-                lunch=e
+                lunch=e,
+                mid=obj.id
                 )
             obj1.save();
         for i in range(1,dm2+1):
             pdf=request.FILES["pdf"+str(i)]
             pdfname=request.POST["pdfname"+str(i)]
             obj2=pdfs.objects.create(
-                date=date,
+                date=formatted_date,
                 hid=hid,
                 hname=hname,
                 pdf=pdf,
                 pdfname=pdfname,
-                adhno=adhno
+                adhno=adhno,
+                mid=obj.id
                 )
             obj2.save();
     return redirect("home")
@@ -592,7 +635,8 @@ def patientLogin(request):
                 l1.append(pd)
                 lst.append(l1)
                 print(pres)
-            return render(request,"displayDetails.html",{"lst":lst,"adno":pid})
+            print(lst)
+            return render(request,"patientHome1.html",{"lst":lst,"adno":pid})
     return render(request,'patientLogin.html')
 from django.http import HttpResponseRedirect
 def adminlogout(request):
@@ -613,12 +657,13 @@ def viewpast(request):
     for i in obj:
         l1=[]
         l1.append(i)
-        pres=Pres.objects.filter(adhno=adno,date=i.date,hid=i.hid)
-        pd=pdfs.objects.filter(adhno=adno,date=i.date,hid=i.hid)
+        pres=Pres.objects.filter(adhno=adno,date=i.date,mid=i.id)
+        pd=pdfs.objects.filter(adhno=adno,date=i.date,mid=i.id)
         l1.append(pres)
         l1.append(pd)
         lst.append(l1)
         print(pres)
+
     return render(request,"displayDetails.html",{"lst":lst,"adno":adno})
 
 def uploadnew(request):
@@ -626,10 +671,66 @@ def uploadnew(request):
         hid = request.POST['hid']
         hname = request.POST['hname']
         pname = request.POST['pname']
-        return render(request, "uploadDetailsHosp.html", {'pname':pname, 'hname':hname, 'hid':hid})
+        adno=request.POST['adno']
+        return render(request, "uploadDetailsHosp.html", {'pname':pname, 'hname':hname, 'hid':hid,'adno':adno})
 def uploadnewD(request):
     if request.method == 'POST':
         did = request.POST['did']
         dname = request.POST['dname']
         pname = request.POST['pname']
-        return render(request, "uploadDetailsDiag.html", {'pname':pname, 'dname':dname, 'did':did})
+        adno=request.POST['adno']
+        return render(request, "uploadDetailsDiag.html", {'pname':pname, 'dname':dname, 'did':did,'adno':adno})
+def showStats(request):
+    allob = PatientDetails.objects.all().values()
+    allpat = Patient.objects.all().values()
+    df = pd.DataFrame(allob)
+    df1 = pd.DataFrame(allpat)
+    diseases = df['disease'].unique() #unique diseases
+    # print(diseases)
+    state = "Andhrapradesh"
+    dfs = df1[df1['state']==state]
+    districts = list(dfs['dist'].unique()) # unique districts
+    print(districts)
+    lisdis = []
+    lisdis1 = []
+    col = ["AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","DarkOrange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RebeccaPurple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"]
+    for i in districts:
+        # print(i)
+        adnos = df1[(df1['state']==state) & (df1['dist']==i)]
+        adnos = list(adnos['adhno'])
+        # print(adnos)
+        filtered_df = df[df['adhno'].isin(adnos)]
+        disease_counts = Counter(filtered_df['disease'])
+        if not disease_counts:
+            continue
+        max_count_item = max(disease_counts.items(), key=lambda x: x[1])
+        n = [i,max_count_item[1],random.choice(col),max_count_item[0]]
+        n1 = [max_count_item[0],max_count_item[1]]
+        lisdis1.append(n1)
+        lisdis.append(n)
+    # print(lisdis)
+    json_nested_list = json.dumps(lisdis)
+    json_nested_list1 = json.dumps(lisdis1)
+    # print(type(districts),districts)
+    return render(request,'viewStats.html',{'state':state,'json_nested_list': json_nested_list,'json_nested_list1': json_nested_list1})
+
+def displaypdf(request):
+    if request.method=='POST':
+        pid=request.POST['pid']
+        obj=pdfs.objects.get(id=pid)
+        return render(request,"displaypdf.html",{'obj':obj})
+    return render(request,"displaypdf.html")
+def addpdf(request):
+    if(request.method=='POST'):
+        adno=request.POST['adno']
+        return render(request,"addpdf.html",)
+def storepdf(request):
+    if request.method=='POST':
+        adno=request.POST['adno']
+        pdfname=request.POST['pdfname']
+        pdf=request.FILES["pdf"]
+        obj=ppdfs.objects.create(adhno=adno,pdfname=pdfname,pdf=pdf)
+        obj.save();
+        return render(request,"patientlogin.html")
+
+

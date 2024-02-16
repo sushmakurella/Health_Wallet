@@ -64,6 +64,7 @@ class PatientDetails(models.Model):
 class pdfs(models.Model):
     date=models.CharField(max_length=50)
     hid=models.CharField(max_length=50)
+    mid=models.CharField(max_length=50,default="0")
     hname=models.CharField(max_length=50)
     pdf=models.FileField(upload_to='pdfs/', blank=True)
     pdfname=models.CharField(max_length=50,default="-")
@@ -71,6 +72,7 @@ class pdfs(models.Model):
 class Pres(models.Model):
     date=models.CharField(max_length=50)
     hid=models.CharField(max_length=50)
+    mid=models.CharField(max_length=50,default="0")
     hname=models.CharField(max_length=50)
     medicine=models.CharField(max_length=500, blank=True)
     time=models.CharField(max_length=50)
@@ -82,3 +84,7 @@ class image(models.Model):
     hname=models.CharField(max_length=50)
     img=models.ImageField(upload_to='images/',blank=True) 
     adhno=models.CharField(max_length=12)
+class ppdfs(models.Model):
+    adhno=models.CharField(max_length=50)
+    pdf=models.FileField(upload_to='pdfs/', blank=True)
+    pdfname=models.CharField(max_length=50)
