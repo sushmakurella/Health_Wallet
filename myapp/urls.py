@@ -13,6 +13,7 @@ urlpatterns=[
     path('setDpswd/<str:did>',views.setDpswd,name='setDpswd'),
     path('setDpswd/setDpswd/<str:did>',views.setDpswd,name='setDpswd'),
     path('patientlogin', views.patientLogin, name = 'patientlogin'),
+    path('patientloginregister', views.patientloginregister, name = 'patientloginregister'),
     path('savepswd',views.savepswd,name='savepswd'),
     path('hospitallogin',views.hospitalLogin,name='hospitallogin'),
     path('diaglogin', views.diaglogin, name='diaglogin'),

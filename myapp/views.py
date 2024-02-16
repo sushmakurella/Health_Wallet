@@ -429,3 +429,6 @@ def patientLogin(request):
         if(pobj.pswd == ppswd):
             return render(request, 'patientHome.html',{'pname': pobj.pname})
     return render(request,'patientLogin.html')
+
+def patientloginregister(request):
+    return render(request, "patientlr.html")
