@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.template import loader
 from geopy.geocoders import Nominatim
 import folium
-
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
 
 import math, random
  
@@ -401,4 +402,21 @@ def recommendMedicine(request):
         #****************************************model one completed**********************************
         return render(request,"displayMedicine.html",{"data":recommended_medicines})
     return render(request,"recommendMedicine.html")
-    
+
+def adminhome(request):
+    return render(request,"adminhome.html")
+def adminlogin(request):
+    if request.method == 'POST':
+        username = request.POST['uname']
+        password = request.POST['pswd']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Redirect to a success page or any other page
+            return redirect('adminhome')
+        else:
+            # Authentication failed, display an error message
+            error_message = "Invalid username or password. Please try again."
+            return render(request, 'adminlogin.html', {'error_message': error_message})
+    else:
+        return render(request, 'adminlogin.html')

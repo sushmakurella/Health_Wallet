@@ -20,6 +20,8 @@ urlpatterns=[
     path('uploadDetails',views.uploadDetails,name='uploadDetails'),    
     path('storeDetails',views.storeDetails,name='storeDetails'),    
     path('recommendMedicine',views.recommendMedicine,name='recommendMedicine'),    
+    path('adminlogin',views.adminlogin,name='adminlogin'),    
+    path('adminhome',views.adminhome,name='adminhome'),    
     ]
 
 if settings.DEBUG:
