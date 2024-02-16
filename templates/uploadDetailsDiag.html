@@ -84,6 +84,7 @@
     </head>
 
     <body>
+<<<<<<< HEAD
         <div class="container">
             <h2>Medical Record Form</h2>
             <h3>Diagnostic center name: {{dname}}</h3>
@@ -92,6 +93,16 @@
                 {% csrf_token %}
                 <label for="date">Date:</label><br>
                 <input type="date" id="date" name="date" maxlength="50" required><br>
+=======
+        <h2>Medical Record Form</h2>
+        <h3>Diagnostic center ID: {{did}}</h3>
+        <h3>Diagnostic center name: {{dname}}</h3>
+        <h3>Patient name: {{pname}}</h3>
+        <form method="post" action="storeDetails">
+            {% csrf_token %}
+            <label for="date">Date:</label><br>
+            <input type="date" id="date" name="date" maxlength="50" required><br>
+>>>>>>> midhun
 
                 <label for="disease">Disease:</label><br>
                 <input type="text" id="disease" name="disease" maxlength="400" required><br>
@@ -108,11 +119,20 @@
                 <label for="hid">Hospital ID:</label><br>
                 <input type="text" id="hid" name="hid" maxlength="50" required><br>
 
+<<<<<<< HEAD
                 <label for="hname">Hospital Name:</label><br>
                 <input type="text" id="hname" name="hname" maxlength="50" required><br>
 
                 <label for="dname">Doctor Name:</label><br>
                 <input type="text" id="dname" name="dname" maxlength="50" required><br>
+=======
+            <label style="display: none;" for="hid">Center ID:</label><br>
+            <input style="display: none;" type="text" id="hid" name="hid" maxlength="50" value="{{did}}" required><br>
+
+            <label style="display: none;" for="hname">Center Name:</label><br>
+            <input style="display: none;" type="text" id="hname" name="hname" maxlength="50" value="{{dname}}"
+                required><br>
+>>>>>>> midhun
 
                 <!-- <input type="text" name="dm1" id="dm1" value="1">
             <table>

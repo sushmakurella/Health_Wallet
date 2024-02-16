@@ -13,6 +13,7 @@
                 background-color: #f5f5f5;
             }
 
+<<<<<<< HEAD
             .container {
                 max-width: 800px;
                 margin: 50px auto;
@@ -21,6 +22,17 @@
                 border-radius: 5px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
+=======
+<body>
+    <h2>Medical Record Form</h2>
+    <h3>Hospital name: {{hname}}</h3>
+    <h3>Hospital ID: {{hid}}</h3>
+    <h3>Patient name: {{pname}}</h3>
+    <form method="post" action="storeDetails">
+        {% csrf_token %}
+        <label for="date">Date:</label><br>
+        <input type="date" id="date" name="date" maxlength="50" required><br>
+>>>>>>> midhun
 
             h2 {
                 text-align: center;
@@ -56,6 +68,7 @@
                 cursor: pointer;
             }
 
+<<<<<<< HEAD
             input[type="submit"]:hover {
                 background-color: #0056b3;
             }
@@ -65,6 +78,13 @@
                 border-collapse: collapse;
                 margin-bottom: 10px;
             }
+=======
+        <label style="display: none;" for="hid">Hospital ID:</label><br>
+        <input style="display: none;" type="text" id="hid" name="hid" maxlength="50" value="{{hid}}" required><br>
+
+        <label style="display: none;" for="hname">Hospital Name:</label><br>
+        <input style="display: none;" type="text" id="hname" name="hname" maxlength="50" value="{{hname}}" required><br>
+>>>>>>> midhun
 
             th,
             td {

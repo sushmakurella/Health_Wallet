@@ -29,6 +29,10 @@ urlpatterns=[
     path('fetchPatientD', views.fetchPatientD, name = 'fetchPatientD'),
     path('otpauth', views.otpauth, name = 'otpauth'),
     path('otpauthD', views.otpauthD, name = 'otpauthD'),
+    # path('enteraadhaar', views.enteraadhaar, name = 'enteraadhaar'),
+    path('viewpast', views.viewpast, name='viewpast'),
+    path('uploadnew', views.uploadnew, name='uploadnew'),
+    path('uploadnewD', views.uploadnewD, name='uploadnewD'),
     ]
 
 if settings.DEBUG:

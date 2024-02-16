@@ -28,16 +28,19 @@ def fetchPatient(request):
     if request.method == 'POST':
         adno = request.POST['aadhaar']
         hname = request.POST['hname']
+        hid = request.POST['hid']
         try:
             pobj = Patient.objects.get(adhno = adno)
             print(pobj)
         except:
             return redirect(hospitalLogin)
         pmobno = str(pobj.phno)
+        pmail = str(pobj.emial)
         client = Client(account_sid, auth_token)
         otp = generateOTP()
         pobj.otp = otp
         pobj.save()
+        pname = pobj.pname
         try:
             message = client.messages.create(
             from_='+12622268250',
@@ -45,12 +48,26 @@ def fetchPatient(request):
             )
         except:
             pass
-        return render(request, "otpauth.html",{'adno':adno, 'hname':hname})
+        
+        msg = "Subject: Your OTP for HealthWallet\n\nHello dear " + pname + ", Your OTP for HealthWallet is: " + str(otp)
+        try:
+            s = smtplib.SMTP('smtp.gmail.com', 587)
+            s.starttls()
+            s.login("sushmadilakshmikurella@gmail.com", "hsbulcezfkfrhcdz")
+            s.sendmail("sushmadilakshmikurella@gmail.com", pmail, msg)
+            s.quit()
+            print(pmail, msg)
+            messages.info(request, "Email successfully sent")
+        except Exception as e:
+            print("An error occurred:", e)
+            messages.error(request, "Failed to send email")
+        return render(request, "otpauth.html",{'adno':adno, 'hname':hname, 'hid':hid})
 
 def fetchPatientD(request):
     if request.method == 'POST':
         adno = request.POST['aadhaar']
         dname = request.POST['dname']
+        did = request.POST['did']
         print(dname,'1111')
         try:
             pobj = Patient.objects.get(adhno = adno)
@@ -58,10 +75,12 @@ def fetchPatientD(request):
         except:
             return redirect(diaglogin)
         pmobno = str(pobj.phno)
+        pmail = pobj.emial
         client = Client(account_sid, auth_token)
         otp = generateOTP()
         pobj.otp = otp
         pobj.save()
+        pname = pobj.pname
         try:
             message = client.messages.create(
             from_='+12622268250',
@@ -69,23 +88,37 @@ def fetchPatientD(request):
             )
         except:
             pass
-        return render(request, "otpauthD.html",{'adno':adno,'dname':dname})
+        msg = "Subject: Your OTP for HealthWallet\n\nHello dear " + pname + ", Your OTP for HealthWallet is: " + str(otp)
+        try:
+            s = smtplib.SMTP('smtp.gmail.com', 587)
+            s.starttls()
+            s.login("sushmadilakshmikurella@gmail.com", "hsbulcezfkfrhcdz")
+            s.sendmail("sushmadilakshmikurella@gmail.com", pmail, msg)
+            s.quit()
+            print(pmail, msg)
+            messages.info(request, "Email successfully sent")
+        except Exception as e:
+            print("An error occurred:", e)
+            messages.error(request, "Failed to send email")
+        return render(request, "otpauthD.html",{'adno':adno,'dname':dname, 'did':did})
 
 def otpauth(request):
     if request.method == 'POST':
         adno = request.POST['adno']
         otp = request.POST['otp']
         hname = request.POST['hname']
+        hid = request.POST['hid']
 
         try:
             pobj = Patient.objects.get(adhno = adno)
             print(pobj)
         except:
             return redirect(hospitalLogin)
-        correct_otp = str(pobj.otp) 
+        correct_otp = str(pobj.otp)
+        pname = pobj.pname 
         print(correct_otp, otp)
         if(otp == correct_otp):
-            return render(request, "uploadDetailsHosp.html", {'pname':pobj.pname, 'hname':hname})
+            return render(request, "vieworadd.html", {'pname':pname, 'hname':hname, 'hid':hid, 'adno':adno})
         else:
             return redirect(hospitalLogin)
 
@@ -95,6 +128,7 @@ def otpauthD(request):
         adno = request.POST['adno']
         otp = request.POST['otp']
         dname = request.POST['dname']
+        did = request.POST['did']
         print(dname,'3333')
         try:
             pobj = Patient.objects.get(adhno = adno)
@@ -102,9 +136,10 @@ def otpauthD(request):
         except:
             return redirect(diaglogin)
         correct_otp = str(pobj.otp) 
+        pname = pobj.pname
         print(correct_otp, otp)
         if(otp == correct_otp):
-            return render(request, "uploadDetailsDiag.html", {'pname':pobj.pname, 'dname':dname})
+            return render(request, "uploadDetailsDiag.html", {'pname':pname, 'dname':dname, 'did':did})
         else:
             return redirect(diaglogin)
 
@@ -118,7 +153,7 @@ def hospitalLogin(request):
         hpswd = request.POST['hpswd']
         hobj = Hospital.objects.get(hid = hid)
         if(hobj.pswd == hpswd):
-            return render(request, 'hospitalhome.html',{'hname': hobj.hname})
+            return render(request, 'hospitalhome.html',{'hname': hobj.hname, 'hid': hid})
     return render(request,'hospitalLogin.html')
 def diaglogin(request):
     if request.method=='POST':
@@ -126,7 +161,7 @@ def diaglogin(request):
         dpswd = request.POST['dpswd']
         dobj = DiagCenter.objects.get(dcid=did)
         if(dobj.pswd==dpswd):
-            return render(request,'diaghome.html',{'dname':dobj.dcname})
+            return render(request,'diaghome.html',{'dname':dobj.dcname, 'did':did})
     return render(request,'diaglogin.html')
 def home(request):
     return render(request,"home.html")
@@ -562,4 +597,37 @@ def patientLogin(request):
 def patientloginregister(request):
     return render(request, "patientlr.html")
 
+<<<<<<< HEAD
 
+=======
+def viewpast(request):
+    adno = request.POST['adno']
+    obj=PatientDetails.objects.filter(adhno=adno)
+    lst=[]
+    lst1=[]
+    lst2=[]
+    l=[i for i in range(0,len(obj))]
+    for i in obj:
+        l1=[]
+        l1.append(i)
+        pres=Pres.objects.filter(adhno=adno,date=i.date,hid=i.hid)
+        pd=pdfs.objects.filter(adhno=adno,date=i.date,hid=i.hid)
+        l1.append(pres)
+        l1.append(pd)
+        lst.append(l1)
+        print(pres)
+    return render(request,"displayDetails.html",{"lst":lst,"adno":adno})
+
+def uploadnew(request):
+    if request.method == 'POST':
+        hid = request.POST['hid']
+        hname = request.POST['hname']
+        pname = request.POST['pname']
+        return render(request, "uploadDetailsHosp.html", {'pname':pname, 'hname':hname, 'hid':hid})
+def uploadnewD(request):
+    if request.method == 'POST':
+        did = request.POST['did']
+        dname = request.POST['dname']
+        pname = request.POST['pname']
+        return render(request, "uploadDetailsDiag.html", {'pname':pname, 'dname':dname, 'did':did})
+>>>>>>> midhun
