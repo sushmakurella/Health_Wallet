@@ -420,3 +420,12 @@ def adminlogin(request):
             return render(request, 'adminlogin.html', {'error_message': error_message})
     else:
         return render(request, 'adminlogin.html')
+
+def patientLogin(request):
+    if request.method == 'POST':
+        pid = request.POST['pid']
+        ppswd = request.POST['ppswd']
+        pobj = Patient.objects.get(adhno = pid)
+        if(pobj.pswd == ppswd):
+            return render(request, 'patientHome.html',{'pname': pobj.pname})
+    return render(request,'patientLogin.html')
