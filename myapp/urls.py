@@ -31,6 +31,8 @@ urlpatterns=[
     path('viewpast', views.viewpast, name='viewpast'),
     path('uploadnew', views.uploadnew, name='uploadnew'),
     path('uploadnewD', views.uploadnewD, name='uploadnewD'),
+    path('viewStats', views.showStats, name='viewStats'),
+
     ]
 
 if settings.DEBUG:

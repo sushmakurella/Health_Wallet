@@ -9,6 +9,10 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 import math, random
 from twilio.rest import Client
+import json
+import pandas as pd
+from collections import Counter
+import math,random
 
 
 # function to generate OTP
@@ -582,3 +586,35 @@ def uploadnewD(request):
         dname = request.POST['dname']
         pname = request.POST['pname']
         return render(request, "uploadDetailsDiag.html", {'pname':pname, 'dname':dname, 'did':did})
+def showStats(request):
+    allob = PatientDetails.objects.all().values()
+    allpat = Patient.objects.all().values()
+    df = pd.DataFrame(allob)
+    df1 = pd.DataFrame(allpat)
+    diseases = df['disease'].unique() #unique diseases
+    # print(diseases)
+    state = "Andhrapradesh"
+    dfs = df1[df1['state']==state]
+    districts = list(dfs['dist'].unique()) # unique districts
+    lisdis = []
+    lisdis1 = []
+    col = ["AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","DarkOrange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RebeccaPurple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"]
+    for i in districts:
+        # print(i)
+        adnos = df1[(df1['state']==state) & (df1['dist']==i)]
+        adnos = list(adnos['adhno'])
+        # print(adnos)
+        filtered_df = df[df['adhno'].isin(adnos)]
+        disease_counts = Counter(filtered_df['disease'])
+        if not disease_counts:
+            continue
+        max_count_item = max(disease_counts.items(), key=lambda x: x[1])
+        n = [i,max_count_item[1],random.choice(col),max_count_item[0]]
+        n1 = [max_count_item[0],max_count_item[1]]
+        lisdis1.append(n1)
+        lisdis.append(n)
+    # print(lisdis)
+    json_nested_list = json.dumps(lisdis)
+    json_nested_list1 = json.dumps(lisdis1)
+    # print(type(districts),districts)
+    return render(request,'stats.html',{'state':state,'json_nested_list': json_nested_list,'json_nested_list1': json_nested_list1})
