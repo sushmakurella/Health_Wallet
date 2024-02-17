@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'medicalProject.wsgi.application'
 
 import dj_database_url
 DATABASES={
-   'default':dj_database_url.parse("postgres://healthwallet_675m_user:L40o5a4iZRPdn32sAhjeWED4euPiU1m6@dpg-cn7vg27109ks739logvg-a.oregon-postgres.render.com/healthwallet_675m")
+   'default':dj_database_url.parse("postgres://healthwallet_yd4v_user:qndVthfAFYi4i5PBmFaMfO8fkGHcR5iU@dpg-cn7virocmk4c739ntfug-a.oregon-postgres.render.com/healthwallet_yd4v")
 }
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
